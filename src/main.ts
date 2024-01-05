@@ -11,7 +11,6 @@ const crawler1 = new PlaywrightCrawler({
     await enqueueLinks({
       transformRequestFunction: (request) => {
         request.uniqueKey = `${request.url}:${randomUUID()}`;
-        log.info(`request uniqueKey: ${request.uniqueKey}`)
         return request;
       },
     });
@@ -19,7 +18,7 @@ const crawler1 = new PlaywrightCrawler({
 });
 
 console.log('start crawl1')
-await crawler1.run(startUrls);
+await crawler1.run(startUrls.map(url => ({ url, uniqueKey: randomUUID() })))
 
 const crawler2 = new PlaywrightCrawler({
   maxRequestsPerCrawl: 1,
@@ -28,7 +27,6 @@ const crawler2 = new PlaywrightCrawler({
     await enqueueLinks({
       transformRequestFunction: (request) => {
         request.uniqueKey = `${request.url}:${randomUUID()}`;
-        log.info(`request uniqueKey: ${request.uniqueKey}`)
         return request;
       },
     });
@@ -36,4 +34,4 @@ const crawler2 = new PlaywrightCrawler({
 });
 
 console.log('start crawl2')
-await crawler2.run(startUrls);
+await crawler2.run(startUrls.map(url => ({ url, uniqueKey: randomUUID() })))
